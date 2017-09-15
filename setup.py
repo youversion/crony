@@ -14,6 +14,8 @@ version = re.search(
 with open('README.md', 'rb') as readme:
     long_descr = readme.read().decode('utf-8')
 
+zip_file = f'https://github.com/youversion/crony/archive/{version}.zip'
+
 setup(
     author='Brad Belyeu',
     author_email='brad.belyeu@life.church',
@@ -31,7 +33,7 @@ setup(
         'Topic :: Utilities'
     ],
     description='Python command line application bare bones template.',
-    download_url=f'https://github.com/youversion/crony/archive/{version}.zip',
+    download_url=zip_file,
     entry_points={'console_scripts': ['crony = crony.crony:main']},
     license='MIT',
     long_description=long_descr,
