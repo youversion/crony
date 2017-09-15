@@ -26,6 +26,10 @@ class CommandCenter(object):
 
     def __init__(self, opts):
         """Initialize the Command Center."""
+        if opts.version:
+            print(__version__)
+            sys.exit(0)
+
         if not opts or not opts.cmd:
             raise RuntimeError('No command provided to run')
         else:
@@ -256,6 +260,8 @@ def main():
 
     parser.add_argument('-v', '--verbose', action='store_true', help='Increase level of verbosity'
                         ' output by crony')
+
+    parser.add_argument('--version', action='store_true', help='Output crony version # and exit')
 
     parser.add_argument('cmd', nargs=argparse.REMAINDER, help='Command to run and monitor')
 
