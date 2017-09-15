@@ -131,7 +131,7 @@ class CommandCenter(object):
         """Run command and report errors to Sentry."""
         self.logger.debug(f'Running command: {self.cmd}')
         try:
-            return subprocess.check_output(self.cmd, shell=True), 0
+            return subprocess.check_output(self.cmd, shell=True, stderr=subprocess.STDOUT), 0
 
         except subprocess.CalledProcessError as e:
             return e.output, e.returncode
