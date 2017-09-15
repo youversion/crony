@@ -204,7 +204,7 @@ class CommandCenter(object):
                 self.logger.debug(f'Venv directory given, adding {add_path}')
                 venv = os.path.join(venv, add_path)
             self.logger.debug(f'Adding sourcing virtualenv {venv}')
-            self.cmd = f'source {venv} && {self.cmd}'
+            self.cmd = f'. {venv} && {self.cmd}'
 
 
 def main():
