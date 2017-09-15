@@ -6,7 +6,7 @@ from setuptools import setup
 
 
 version = re.search(
-    '^__version__\s*=\s*"(.*)"',
+    "^__version__\s*=\s*'(.*)'",
     open('crony/crony.py').read(),
     re.M
 ).group(1)
