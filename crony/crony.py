@@ -12,7 +12,7 @@ import raven
 import requests
 from raven.handlers.logging import SentryHandler
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 
 class CommandCenter(object):
