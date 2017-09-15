@@ -12,7 +12,7 @@ import raven
 import requests
 from raven.handlers.logging import SentryHandler
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 
 class CommandCenter(object):
@@ -138,9 +138,10 @@ class CommandCenter(object):
 
     def setup_dir(self):
         """Change directory for script if necessary."""
-        if self.opts.cd:
-            self.logger.debug(f'Adding cd to {self.opts.cd}')
-            self.cmd = f'cd {self.opts.cd} && {self.cmd}'
+        cd = self.opts.cd or self.config['crony'].get('directory')
+        if cd:
+            self.logger.debug(f'Adding cd to {cd}')
+            self.cmd = f'cd {cd} && {self.cmd}'
 
     def setup_logging(self):
         """Setup python logging handler."""

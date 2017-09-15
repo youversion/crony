@@ -31,7 +31,7 @@ setup(
         'Topic :: Utilities'
     ],
     description='Python command line application bare bones template.',
-    download_url='https://github.com/youversion/crony/archive/0.1.0.zip',
+    download_url=f'https://github.com/youversion/crony/archive/{version}.zip',
     entry_points={'console_scripts': ['crony = crony.crony:main']},
     license='MIT',
     long_description=long_descr,
