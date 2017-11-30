@@ -38,7 +38,7 @@ class CommandCenter(object):
         self.cmd = ' '.join(self.opts.cmd)
 
         # Load system wide options from config file
-        config_msg = self.load_config()
+        config_msg = self.load_config(self.opts.config)
 
         # Setup Sentry Client before logging for SentryHandler
         if not self.opts.dsn:
@@ -99,14 +99,19 @@ class CommandCenter(object):
 
         return output, exit_status
 
-    def load_config(self):
+    def load_config(self, custom_config):
         """Attempt to load config from file.
 
-        User's come directory takes precedence over a system wide config.
+        If the command specified a --config parameter, then load that config file.
+        Otherwise, the user's home directory takes precedence over a system wide config.
         Config file in the user's dir should be named ".cronyrc".
         System wide config should be located at "/etc/crony.conf"
         """
         self.config = configparser.ConfigParser()
+
+        if custom_config:
+            self.config.read(custom_config)
+            return f'Loading config from file {custom_config}.'
 
         home = os.path.expanduser('~{}'.format(getpass.getuser()))
         home_conf_file = os.path.join(home, '.cronyrc')
@@ -117,6 +122,7 @@ class CommandCenter(object):
             if os.path.exists(conf_file):
                 self.config.read(conf_file)
                 return f'Loading config from file {conf_file}.'
+
         self.config['crony'] = {}
         return 'No config file found.'
 
@@ -246,6 +252,9 @@ def main():
     parser.add_argument('-l', '--log', action='store',
                         help='Log file to direct stdout of script run to. Can be passed or '
                         'defined in config file with "log_file"')
+
+    parser.add_argument('-o', '--config', action='store',
+                        help='Path to a crony config file to use.')
 
     parser.add_argument('-p', '--path', action='store',
                         help='Paths to append to the PATH environment variable before running. '
