@@ -32,7 +32,7 @@ setup(
         'Topic :: System :: Monitoring',
         'Topic :: Utilities'
     ],
-    description='Python command line application bare bones template.',
+    description='Cron monitoring tool.',
     download_url=zip_file,
     entry_points={'console_scripts': ['crony = crony.crony:main']},
     license='MIT',
