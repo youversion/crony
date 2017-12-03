@@ -128,10 +128,6 @@ class CommandCenter(object):
 
     def log(self, output, exit_status):
         """Log given CompletedProcess and return exit status code."""
-        output = output.decode('utf8')
-        if output:
-            self.logger.info(output)
-
         if exit_status != 0:
             self.logger.error(f'Error running command! Exit status: {exit_status}, {output}')
 
@@ -140,9 +136,24 @@ class CommandCenter(object):
     def run(self):
         """Run command and report errors to Sentry."""
         self.logger.debug(f'Running command: {self.cmd}')
-        try:
-            return subprocess.check_output(self.cmd, shell=True, stderr=subprocess.STDOUT), 0
 
+        def execute(cmd):
+            output = ""
+            popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                     universal_newlines=True, shell=True)
+            for stdout_line in iter(popen.stdout.readline, ""):
+                stdout_line = stdout_line.strip('\n')
+                output += stdout_line
+                yield stdout_line
+            popen.stdout.close()
+            return_code = popen.wait()
+            if return_code:
+                raise subprocess.CalledProcessError(return_code, cmd, output)
+
+        try:
+            for out in execute(self.cmd):
+                self.logger.info(out)
+            return "", 0
         except subprocess.CalledProcessError as e:
             return e.output, e.returncode
 
